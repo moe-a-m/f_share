@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const API_URL = "http://161.35.27.198:3001/";
+// Dynamically get the server IP address
+const API_URL = `http://${window.location.hostname}:3001/`;
 
 const register = (username, email, password) => {
     return axios.post(API_URL + "auth/signup", {
@@ -41,6 +42,6 @@ const AuthService = {
     login,
     logout,
     getCurrentUser,
-}
+};
 
-export default AuthService; 
+export default AuthService;
