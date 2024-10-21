@@ -1,11 +1,10 @@
 import axios from "axios";
 
-// Dynamically get the server IP address
-const API_URL = `http://${window.location.hostname}:3001/`;
-
-export default axios.create({
-    baseURL: API_URL,
+const http = axios.create({
+    baseURL: `http://${window.location.hostname}:3001`,
     headers: {
-        "Content-type": "application/json",
+        "Content-Type": "application/json",
     },
 });
+
+export default http;

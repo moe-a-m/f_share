@@ -10,7 +10,7 @@ import Register from "./components/Register";
 import Home from "./components/Home";
 import FileUpload from "./components/FileUpload";
 import Profile from "./components/Profile";
-
+import UserFiles from "./components/UserFiles";
 // import AuthVerify from "./common/AuthVerify";
 import EventBus from "./common/EventBus";
 
@@ -41,28 +41,25 @@ const App = () => {
   return (
     <div>
       <nav className="navbar navbar-expand navbar-dark bg-dark">
-        <Link to={"/"} className="navbar-brand">
+        <Link to={""} className="navbar-brand">
           Fshare
         </Link>
         <div className="navbar-nav mr-auto">
-          <li className="nav-item">
-            <Link to={"/home"} className="nav-link">
-              Home
-            </Link>
-          </li>
 
-          {/* <li className="nav-item">
-            <Link to={"/file"} className="nav-link">
-              Files
-            </Link>
-          </li> */}
 
           {currentUser && (
-            <li className="nav-item">
-              <Link to={"/user"} className="nav-link">
-                User
-              </Link>
-            </li>
+            <>
+              <li className="nav-item">
+                <Link to={"/home"} className="nav-link">
+                  Home
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link to={"/UserFiles"} className="nav-link">
+                  Files
+                </Link>
+              </li>
+            </>
           )}
         </div>
 
@@ -104,6 +101,7 @@ const App = () => {
           <Route exact path="/register" element={<Register />} />
           <Route exact path="/Profile" element={<Profile />} />
           <Route exact path="/FileUpload" element={<FileUpload />} />
+          <Route exact path="/UserFiles" element={<UserFiles />} />
         </Routes>
       </div>
 

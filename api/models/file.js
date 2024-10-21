@@ -1,25 +1,26 @@
 const mongoose = require('mongoose');
 
 const fileSchema = new mongoose.Schema({
+    // Reference to the user who uploaded the file (optional)
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
+        required: false // Set to true if you require authentication for uploads
+    },
+    name: { // Updated field name to match the controller code
+        type: String,
         required: true
     },
-    fileName: {
+    url: { // Updated field name to match the controller code
         type: String,
         required: true
     },
     fileType: {
         type: String,
-        enum: ['image', 'video'],
+        enum: ['image', 'video', 'other'], // Added 'other' for additional file types
         required: true
     },
-    fileUrl: {
-        type: String,
-        required: true
-    },
-    uploadTime: {
+    uploadDate: { // Changed from 'uploadTime' to 'uploadDate' for consistency
         type: Date,
         default: Date.now
     },
