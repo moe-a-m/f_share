@@ -16,8 +16,10 @@ var fileRouter = require('./routes/file')
 var app = express();
 const bodyParser = require("body-parser")
 
+const API_URL = `http://${window.location.hostname}:3001/`;
+
 // Database connection
-mongoose.connect('mongodb://localhost:27017/test')
+mongoose.connect('mongodb://' + API_URL + ':27017/test')
   .then(() => {
     console.log('Connected to MongoDB');
   })
