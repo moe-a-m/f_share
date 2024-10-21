@@ -1,6 +1,5 @@
 import axios from "axios";
 
-// Dynamically get the server IP address
 const API_URL = `http://${window.location.hostname}:3001/`;
 
 const register = (username, email, password) => {
@@ -18,7 +17,7 @@ const login = (username, password) => {
             password,
         })
         .then((response) => {
-            if (response.data.username) {
+            if (response.data.accessToken) {
                 localStorage.setItem("user", JSON.stringify(response.data));
             }
 
@@ -28,13 +27,15 @@ const login = (username, password) => {
 
 const logout = () => {
     localStorage.removeItem("user");
-    return axios.post(API_URL + "signout").then((response) => {
+    return axios.post(API_URL + "auth/signout").then((response) => {
         return response.data;
     });
 };
 
 const getCurrentUser = () => {
-    return JSON.parse(localStorage.getItem("user"));
+    const userStr = localStorage.getItem("user");
+    if (userStr) return JSON.parse(userStr);
+    return null;
 };
 
 const AuthService = {

@@ -29,18 +29,28 @@ router.post('/login', async (req, res) => {
     try {
         const user = await User.findOne({ username });
         if (!user || !(await user.matchPassword(password))) {
-            return res.status(401).json({ message: 'Invalid credentials' + username});
+            return res.status(401).json({ message: 'Invalid credentials for ' + username });
         }
 
         // Create a JWT token
         const claims = { id: user._id, username: user.username };
-        const jwt = nJwt.create(claims, signingKey);
-        jwt.setExpiration(new Date().getTime() + 60 * 60 * 1000); // 1 hour expiry
-        const token = jwt.compact();
+        const jwtToken = nJwt.create(claims, signingKey);
+        jwtToken.setExpiration(new Date().getTime() + 60 * 60 * 1000); // 1 hour expiry
+        const token = jwtToken.compact();
 
-        res.json({ token });
+        // Prepare user data to send to frontend
+        const userProfile = {
+            id: user._id,
+            username: user.username,
+            email: user.email,
+            roles: user.roles, // Ensure 'roles' is a field in your User model
+            accessToken: token,
+            tokenType: 'Bearer' // Include if you use Bearer tokens
+        };
+
+        res.json(userProfile);
     } catch (error) {
-        res.status(400).json({ error: 'Error logging in' + error.message });
+        res.status(400).json({ error: 'Error logging in: ' + error.message });
     }
 });
 

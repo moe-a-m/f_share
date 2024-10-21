@@ -1,14 +1,29 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import AuthService from "../services/auth.service";
 
 const Profile = () => {
-    const currentUser = AuthService.getCurrentUser();
+    const [currentUser, setCurrentUser] = useState(null);
+
+    useEffect(() => {
+        const user = AuthService.getCurrentUser();
+        setCurrentUser(user);
+    }, []);
+
+    if (!currentUser) {
+        return (
+            <div className="container">
+                <header className="jumbotron">
+                    <h3>Please log in to view your profile.</h3>
+                </header>
+            </div>
+        );
+    }
 
     return (
         <div className="container">
             <header className="jumbotron">
                 <h3>
-                    <strong>{currentUser.username}</strong> Profile
+                    <strong>{currentUser.username}</strong>'s Profile
                 </h3>
             </header>
             <p>
@@ -26,4 +41,4 @@ const Profile = () => {
     );
 };
 
-export default Profile; 
+export default Profile;
