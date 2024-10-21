@@ -1,9 +1,6 @@
 const uploadFile = require("../middleware/uploadMiddleware");
 const fs = require("fs");
-// Dynamically get the server IP address
-const API_URL = `http://${window.location.hostname}:3001/`;
-
-const baseUrl = API_URL +"/files/";
+const baseUrl = "http://localhost:3001/files/";
 
 const upload = async (req, res) => {
     try {
