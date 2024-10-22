@@ -3,7 +3,6 @@ const multer = require("multer");
 const maxSize = 2 * 1024 * 1024;
 const path = require("path");
 const fs = require("fs")
-const FileModel = require("../models/file"); // Ensure this is correctly required
 
 let storage = multer.diskStorage({
     destination: (req, file, cb) => {

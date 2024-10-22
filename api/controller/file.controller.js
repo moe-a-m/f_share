@@ -30,7 +30,8 @@ const upload = async (req, res) => {
         // Create a file metadata object
         const fileData = {
             user: req.user ? req.user._id : null, // Assuming you have user authentication
-            name: req.file.originalname,
+            filename: req.file.originalname,
+            fileBits:req.file,
             url: baseUrl + req.file.filename,
             fileType: fileType,
             uploadDate: new Date(),
