@@ -88,7 +88,7 @@ const UserFiles = () => {
                             <input
                                 type="file"
                                 multiple
-                                accept="image/*"
+                                accept="image/*,video/*"
                                 onChange={selectFiles}
                             />
                         </label>
@@ -127,7 +127,7 @@ const UserFiles = () => {
                         <div>
                             {imagePreviews.map((img, i) => {
                                 return (
-                                    <img className="img" src={img} alt={"image-" + i} key={i} />
+                                    <img className="img-thumbnail" src={img} alt={"image-" + i} key={i} />
                                 );
                             })}
                         </div>

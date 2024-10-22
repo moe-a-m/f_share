@@ -32,11 +32,15 @@ const FileUpload = () => {
         setMessage([]);
     };
 
-    const handleTagChange = (fileIndex, tags) => {
-        let newFileTags = [...fileTags];
-        newFileTags[fileIndex] = tags;
-        setFileTags(newFileTags);
-    };
+    // const handleTagChange = (fileIndex, tags) => {
+    //     let newFileTags = [...fileTags];
+    //     newFileTags[fileIndex] = tags;
+    //     setFileTags(newFileTags);
+    // };
+    function handleTagChange(event) {
+        const newTags = event.target.value.split(','); // Assuming tags are comma-separated
+        setFileTags(newTags);
+    }
 
     const upload = (idx, file) => {
         let _progressInfos = [...progressInfosRef.current.val];
@@ -65,63 +69,133 @@ const FileUpload = () => {
             });
     };
 
+    const uploadMedia = () => {
+        const files = Array.from(selectedFiles);
+
+        let _progressInfos = files.map((file) => ({
+            percentage: 0,
+            fileName: file.name,
+        }));
+
+        progressInfosRef.current = {
+            val: _progressInfos,
+        };
+
+        const uploadPromises = files.map((file, i) => upload(i, file));
+
+        Promise.all(uploadPromises)
+            .then(() => UploadService.getFiles())
+            .then((files) => {
+                setImageInfos(files.data);
+            });
+
+        setMessage([]);
+    };
+
     return (
-        <div className="container">
-            <header className="jumbotron">
-                <h3>Upload Files with Tags</h3>
-            </header>
-            <label className="btn btn-default p-0">
-                <input
-                    type="file"
-                    multiple
-                    accept="image/*,video/mp4,video/x-m4v,video/*"
-                    onChange={selectFiles}
-                    className="img-thumbnail"
-                />
-            </label>
-
-            {imagePreviews.length > 0 && (
-                <div className="preview-container">
-                    {imagePreviews.map((image, index) => (
-                        <div key={index} className="preview-item">
-                            <img
-                                className="preview"
-                                src={image}
-                                alt={"preview " + index}
-                            />
+        <div className="col-md-12">
+            <div className="card card-container">
+                <div className="container">
+                    <div className="form-group">
+                        <label className="btn btn-default p-0">
                             <input
-                                type="text"
-                                placeholder="Enter tags separated by commas"
-                                value={fileTags[index].join(",")}
-                                onChange={(e) =>
-                                    handleTagChange(
-                                        index,
-                                        e.target.value.split(",")
-                                    )
-                                }
+                                type="file"
+                                multiple
+                                accept="image/*,video/*"
+                                onChange={selectFiles}
                             />
-                            <button
-                                onClick={() =>
-                                    upload(index, selectedFiles[index])
-                                }
-                            >
-                                Upload
-                            </button>
+                        </label>
+                        {/* <input
+                            type="text"
+                            placeholder="Enter tags separated by commas"
+                            value={fileTags[index].join(",")}
+                            onChange={(e) =>
+                                handleTagChange(
+                                    index,
+                                    e.target.value.split(",")
+                                )
+                            }
+                        /> */}
+                        <input type="text" value={fileTags} onChange={handleTagChange} />
+                        <div>
+                            {/* Other note content */}
+                            <div>
+                                {fileTags.map((tag, index) => (
+                                    <span key={index} className="badge bg-primary">{tag}</span>
+                                ))}
+                            </div>
                         </div>
-                    ))}
-                </div>
-            )}
+                    </div>
 
-            {message.length > 0 && (
-                <div className="alert alert-secondary" role="alert">
-                    <ul>
-                        {message.map((item, i) => {
-                            return <li key={i}>{item}</li>;
-                        })}
-                    </ul>
+                    {progressInfos &&
+                        progressInfos.val.length > 0 &&
+                        progressInfos.val.map((progressInfo, index) => (
+                            <div className="mb-2" key={index}>
+                                <span>{progressInfo.fileName}</span>
+                                <div className="progress">
+                                    <div
+                                        className="progress-bar progress-bar-info"
+                                        role="progressbar"
+                                        aria-valuenow={progressInfo.percentage}
+                                        aria-valuemin="0"
+                                        aria-valuemax="100"
+                                        style={{ width: progressInfo.percentage + "%" }}
+                                    >
+                                        {progressInfo.percentage}%
+                                    </div>
+
+                                </div>
+                            </div>
+                        ))}
+
+                    {imagePreviews && (
+                        <div>
+                            {imagePreviews.map((img, i) => {
+                                return (
+                                    <img className="img-thumbnail" src={img} alt={"image-" + i} key={i} />
+                                );
+                            })}
+                        </div>
+                    )}
+
+                    {message.length > 0 && (
+                        <div className="alert alert-secondary mt-2" role="alert">
+                            <ul>
+                                {message.map((item, i) => {
+                                    return <li key={i}>{item}</li>;
+                                })}
+                            </ul>
+                        </div>
+                    )}
+
+                    {imageInfos.length > 0 && (
+                        <div className="card mt-3">
+                            <div className="card-header">List of media</div>
+                            <ul className="list-group list-group-flush">
+                                {imageInfos.map((img, index) => (
+                                    <li className="list-group-item" key={index}>
+                                        <p>
+                                            <a href={img.url}>{img.name}</a>
+                                        </p>
+                                        <img src={img.url} alt={img.name} height="80px" />
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
+                    <div className="col-4">
+                        <button
+                            className="btn btn-success btn-sm"
+                            disabled={!selectedFiles}
+                            onClick={uploadMedia}
+                        >
+                            Upload
+                        </button>
+                    </div>
                 </div>
-            )}
+            </div>
         </div>
+
     );
 };
 

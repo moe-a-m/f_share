@@ -59,6 +59,11 @@ const App = () => {
                   Files
                 </Link>
               </li>
+              <li className="nav-item">
+                <Link to={"/FileUpload"} className="nav-link">
+                  Upload Files
+                </Link>
+              </li>
             </>
           )}
         </div>
