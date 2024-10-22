@@ -80,28 +80,7 @@ const UserFiles = () => {
 
 
     return (
-        <div className="col-md-12">
-            <div className="card card-container">
                 <div className="container">
-                    <div className="form-group">
-                        <label className="btn btn-default p-0">
-                            <input
-                                type="file"
-                                multiple
-                                accept="image/*,video/*"
-                                onChange={selectFiles}
-                            />
-                        </label>
-                    </div>
-                    <div className="col-4">
-                        <button
-                            className="btn btn-success btn-sm"
-                            disabled={!selectedFiles}
-                            onClick={uploadMedia}
-                        >
-                            Upload
-                        </button>
-                    </div>
                     {progressInfos &&
                         progressInfos.val.length > 0 &&
                         progressInfos.val.map((progressInfo, index) => (
@@ -159,8 +138,6 @@ const UserFiles = () => {
                         </div>
                     )}
                 </div>
-            </div>
-        </div>
 
     );
 };

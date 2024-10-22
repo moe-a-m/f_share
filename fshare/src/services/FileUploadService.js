@@ -2,6 +2,7 @@ import http from "../common/HttpFileUpload";
 
 // Assuming http has baseURL set to http://localhost:3001
 const upload = (file, tags, onUploadProgress) => {
+    console.log(file);
     let formData = new FormData();
 
     formData.append("file", file);

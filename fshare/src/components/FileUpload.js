@@ -31,12 +31,7 @@ const FileUpload = () => {
         setProgressInfos({ val: [] });
         setMessage([]);
     };
-
-    // const handleTagChange = (fileIndex, tags) => {
-    //     let newFileTags = [...fileTags];
-    //     newFileTags[fileIndex] = tags;
-    //     setFileTags(newFileTags);
-    // };
+    
     function handleTagChange(event) {
         const newTags = event.target.value.split(','); // Assuming tags are comma-separated
         setFileTags(newTags);
@@ -168,21 +163,6 @@ const FileUpload = () => {
                         </div>
                     )}
 
-                    {imageInfos.length > 0 && (
-                        <div className="card mt-3">
-                            <div className="card-header">List of media</div>
-                            <ul className="list-group list-group-flush">
-                                {imageInfos.map((img, index) => (
-                                    <li className="list-group-item" key={index}>
-                                        <p>
-                                            <a href={img.url}>{img.name}</a>
-                                        </p>
-                                        <img src={img.url} alt={img.name} height="80px" />
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    )}
                     <div className="col-4">
                         <button
                             className="btn btn-success btn-sm"

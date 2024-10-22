@@ -5,15 +5,17 @@ const baseUrl = `http://localhost:3001/file/`;
 const FileModel = require("../models/file"); // Ensure this is correctly required
 
 
+// file.controller.js
+
 const upload = async (req, res) => {
     try {
-        await uploadFile(req, res);
+        console.log("req.file:", req.file);
+        console.log("req.body:", req.body);
 
-        if (req.file == undefined) {
+        if (!req.file) {
             return res.status(400).send({ message: "Please upload a file!" });
         }
 
-        // Extract tags from the request body
         let tags = [];
         if (req.body.tags) {
             if (typeof req.body.tags === "string") {
@@ -23,25 +25,24 @@ const upload = async (req, res) => {
             }
         }
 
-        // Determine the file type
-        const fileType = req.file.mimetype.startsWith('image/') ? 'image' :
-            req.file.mimetype.startsWith('video/') ? 'video' : 'other';
+        const fileType = req.file.mimetype.startsWith("image/")
+            ? "image"
+            : req.file.mimetype.startsWith("video/")
+                ? "video"
+                : "other";
 
-        // Create a file metadata object
+        const baseUrl = `${req.protocol}://${req.get("host")}/file/`;
+
         const fileData = {
-            user: req.user ? req.user._id : null, // Assuming you have user authentication
-            filename: req.file.originalname,
-            fileBits:req.file,
+            name: req.file.filename,
+            originalName: req.file.originalname,
             url: baseUrl + req.file.filename,
             fileType: fileType,
             uploadDate: new Date(),
             tags: tags,
-            views: 0,
-            sharedLink: null // Set this if you generate shareable links
         };
 
-        // Save file metadata to the database
-        const file = new File(fileData);
+        const file = new FileModel(fileData);
         await file.save();
 
         res.status(200).send({
@@ -49,16 +50,9 @@ const upload = async (req, res) => {
             file: fileData,
         });
     } catch (err) {
-        console.log(err);
-
-        if (err.code == "LIMIT_FILE_SIZE") {
-            return res.status(500).send({
-                message: "File size cannot be larger than 2MB!",
-            });
-        }
-
+        console.error(err);
         res.status(500).send({
-            message: `Could not upload the file: ${req.file ? req.file.originalname : 'unknown'}. Error: ${err.message}`,
+            message: `Could not upload the file: ${req.file ? req.file.originalname : "unknown"}. Error: ${err.message}`,
         });
     }
 };
