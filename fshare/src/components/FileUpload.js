@@ -100,17 +100,7 @@ const FileUpload = () => {
                                 onChange={selectFiles}
                             />
                         </label>
-                        {/* <input
-                            type="text"
-                            placeholder="Enter tags separated by commas"
-                            value={fileTags[index].join(",")}
-                            onChange={(e) =>
-                                handleTagChange(
-                                    index,
-                                    e.target.value.split(",")
-                                )
-                            }
-                        /> */}
+
                         <input type="text" value={fileTags} onChange={handleTagChange} />
                         <div>
                             {/* Other note content */}

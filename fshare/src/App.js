@@ -11,7 +11,6 @@ import Home from "./components/Home";
 import FileUpload from "./components/FileUpload";
 import Profile from "./components/Profile";
 import UserFiles from "./components/UserFiles";
-// import AuthVerify from "./common/AuthVerify";
 import EventBus from "./common/EventBus";
 
 const App = () => {
@@ -107,10 +106,9 @@ const App = () => {
           <Route exact path="/Profile" element={<Profile />} />
           <Route exact path="/FileUpload" element={<FileUpload />} />
           <Route exact path="/UserFiles" element={<UserFiles />} />
+
         </Routes>
       </div>
-
-      {/* <AuthVerify logOut={logOut}/> */}
     </div>
   );
 };

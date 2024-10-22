@@ -3,6 +3,7 @@ const uploadFile = require("../middleware/uploadMiddleware");
 const fs = require("fs");
 const baseUrl = `http://localhost:3001/file/`;
 const FileModel = require("../models/file"); // Ensure this is correctly required
+const mongoose = require('mongoose');
 
 
 // file.controller.js
@@ -126,9 +127,65 @@ const remove = async (req, res) => {
     }
 };
 
+
+const getFileById = async (req, res) => {
+    try {
+        const fileId = req.params.id;
+
+        if (!mongoose.Types.ObjectId.isValid(fileId)) {
+            return res.status(400).send({ message: "Invalid file ID" });
+        }
+
+        const file = await FileModel.findById(fileId);
+
+        if (!file) {
+            return res.status(404).send({ message: "File not found" });
+        }
+
+        res.status(200).send(file);
+    } catch (err) {
+        console.error("Error retrieving file:", err);
+        res.status(500).send({
+            message: "Error retrieving file. " + err.message,
+        });
+    }
+};
+
+const downloadFileById = async (req, res) => {
+    try {
+        const fileId = req.params.id;
+
+        // Find the file in the database
+        const file = await FileModel.findById(fileId);
+
+        if (!file) {
+            return res.status(404).send({ message: "File not found" });
+        }
+
+        const filePath = path.join(__dirname, "../resources/static/assets/uploads/", file.name);
+
+        res.download(filePath, file.originalName, (err) => {
+            if (err) {
+                console.error("Error downloading file:", err);
+                res.status(500).send({
+                    message: "Could not download the file. " + err.message,
+                });
+            }
+        });
+    } catch (err) {
+        console.error("Error downloading file:", err);
+        res.status(500).send({
+            message: "Error downloading file. " + err.message,
+        });
+    }
+};
+
+
 module.exports = {
     upload,
     getListFiles,
+    getFileById, // Add this line
+    downloadFileById,
     download,
     remove,
 };

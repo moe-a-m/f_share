@@ -2,7 +2,6 @@ import http from "../common/HttpFileUpload";
 
 // Assuming http has baseURL set to http://localhost:3001
 const upload = (file, tags, onUploadProgress) => {
-    console.log(file);
     let formData = new FormData();
 
     formData.append("file", file);
@@ -16,14 +15,27 @@ const upload = (file, tags, onUploadProgress) => {
     });
 };
 
+
+const getFile = (id) => {
+    return http.get(`/file/${id}`);
+};
+
 const getFiles = () => {
     return http.get("/file/files");
 };
 
+const downloadFile = (id) => {
+    return http.get(`/file/download/${id}`, {
+        responseType: 'blob', // Important for file downloads
+    });
+
+};
 
 const FileUploadService = {
     upload,
     getFiles,
+    getFile,
+    downloadFile,
 };
 
 export default FileUploadService;
